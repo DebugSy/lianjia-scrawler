@@ -53,6 +53,10 @@ def get_total_pages(url):
     total_pages = 0
     try:
         page_info = soup.find('div', {'class': 'page-box house-lst-page-box'})
+        found_count = soup.find('h2', {'class': 'total fl'}).find('span').contents[0]
+        count = int(found_count)
+        if count == 0:
+            return 0
     except AttributeError as e:
         page_info = None
 

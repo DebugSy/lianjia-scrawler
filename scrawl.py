@@ -11,12 +11,15 @@ def get_communitylist(city):
     return res
 
 if __name__ == "__main__":
-    regionlist = settings.REGIONLIST  # only pinyin support
+    # regionlist = settings.REGIONLIST  # only pinyin support
+    # communitylist = settings.COMMUNITYLIST  # only pinyin support
     city = settings.CITY
     model.database_init()
-    core.GetHouseByRegionlist(city, regionlist)
-    core.GetRentByRegionlist(city, regionlist)
+    #core.GetHouseByRegionlist(city, regionlist)
+    #core.GetRentByRegionlist(city, regionlist)
     # Init,scrapy celllist and insert database; could run only 1st time
-    core.GetCommunityByRegionlist(city, regionlist)
-    communitylist = get_communitylist(city)  # Read celllist from database
-    core.GetSellByCommunitylist(city, communitylist)
+    # core.GetCommunityByRegionlist(city, regionlist)
+    # communitylist = get_communitylist(city)  # Read celllist from database
+    communitylist = settings.COMMUNITYLIST
+    # core.GetSellByCommunitylist(city, communitylist)
+    core.GetHouseByCommunitylist(city, communitylist)

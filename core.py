@@ -8,7 +8,7 @@ import urllib2
 import logging
 
 logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+    format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)s - %(message)s', level=logging.INFO)
 
 
 def GetHouseByCommunitylist(city, communitylist):
@@ -61,7 +61,7 @@ def GetCommunityByRegionlist(city, regionlist=[u'xicheng']):
             get_community_perregion(city, regionname)
             logging.info(regionname + "Done")
         except Exception as e:
-            logging.error(e)
+            logging.error(e, exc_info=True, stack_info=True)
             logging.error(regionname + "Fail")
             pass
     endtime = datetime.datetime.now()
@@ -104,6 +104,10 @@ def get_house_percommunity(city, communityname):
     if check_block(soup):
         return
     total_pages = misc.get_total_pages(url)
+
+    if total_pages == 0:
+        logging.info("Found " + communityname + " " +  str(total_pages) + " pages")
+        return
 
     if total_pages == None:
         row = model.Houseinfo.select().count()
@@ -331,7 +335,10 @@ def get_community_perregion(city, regionname=u'xicheng'):
             except:
                 continue
             # communityinfo insert into mysql
-            data_source.append(info_dict)
+            if len(info_dict) != 17:
+                logging.info("Field length is error: " + str(len(info_dict)))
+            else:
+                data_source.append(info_dict)
             # model.Community.insert(**info_dict).upsert().execute()
         with model.database.atomic():
             if data_source:

@@ -1,8 +1,10 @@
+# coding=utf-8
 DBENGINE = 'mysql'  # ENGINE OPTIONS: mysql, sqlite3, postgresql
-DBNAME = 'ershoufang'
+DBNAME = 'lianjia_scrawler_idea'
 DBUSER = 'root'
 DBPASSWORD = ''
-DBHOST = '127.0.0.1'
+DBHOST = '192.168.2.161'
 DBPORT = 3306
-CITY = 'bj'  # only one, shanghai=sh shenzhen=sh......
-REGIONLIST = [u'dongcheng']  # only pinyin support
+CITY = 'cd'  # only one, shanghai=sh shenzhen=sh......
+# REGIONLIST = [u'shuangliu']  # only pinyin support
+COMMUNITYLIST = [u'星月花园']
