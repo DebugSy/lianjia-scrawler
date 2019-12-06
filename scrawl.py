@@ -1,3 +1,7 @@
+import os
+from Queue import Queue
+from threading import Thread
+
 import core
 import model
 import settings
@@ -10,16 +14,26 @@ def get_communitylist(city):
             res.append(community.title)
     return res
 
-if __name__ == "__main__":
-    # regionlist = settings.REGIONLIST  # only pinyin support
-    # communitylist = settings.COMMUNITYLIST  # only pinyin support
+
+def split_list_average_n(origin_list, n):
+    for i in range(0, len(origin_list), n):
+        yield origin_list[i:i + n]
+
+
+def main():
+    queue = Queue()
+    thread_list = []
     city = settings.CITY
     model.database_init()
-    #core.GetHouseByRegionlist(city, regionlist)
-    #core.GetRentByRegionlist(city, regionlist)
-    # Init,scrapy celllist and insert database; could run only 1st time
-    # core.GetCommunityByRegionlist(city, regionlist)
-    # communitylist = get_communitylist(city)  # Read celllist from database
     communitylist = settings.COMMUNITYLIST
-    # core.GetSellByCommunitylist(city, communitylist)
-    core.GetHouseByCommunitylist(city, communitylist)
+    sub_communitylist = split_list_average_n(communitylist, 5)
+    for _ in range(5):
+        thread = Thread(target=core.GetHouseByCommunitylist, args=(city, sub_communitylist,))
+        thread.start()
+        thread_list.append(thread)
+
+    for t in thread_list:
+        t.join()
+
+if __name__ == "__main__":
+    main()
