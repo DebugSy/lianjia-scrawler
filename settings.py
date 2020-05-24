@@ -1,10 +1,10 @@
 # coding=utf-8
 DBENGINE = 'mysql'  # ENGINE OPTIONS: mysql, sqlite3, postgresql
-DBNAME = 'lianjia_scrawler_idea'
+DBNAME = 'scrawler'
 DBUSER = 'root'
-DBPASSWORD = ''
-DBHOST = '192.168.2.161'
+DBPASSWORD = '12345678'
+DBHOST = 'localhost'
 DBPORT = 3306
 CITY = 'cd'  # only one, shanghai=sh shenzhen=sh......
-# REGIONLIST = [u'shuangliu']  # only pinyin support
-COMMUNITYLIST = [u'星月花园']
+REGIONLIST = [u'shuangliu']  # only pinyin support
+COMMUNITYLIST = [u'南湖逸家二期']

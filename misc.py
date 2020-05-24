@@ -46,14 +46,53 @@ def get_source_code(url):
 
     return source_code
 
-
 def get_total_pages(url):
     source_code = get_source_code(url)
     soup = BeautifulSoup(source_code, 'lxml')
     total_pages = 0
     try:
         page_info = soup.find('div', {'class': 'page-box house-lst-page-box'})
+    except AttributeError as e:
+        page_info = None
+
+    # if it doesnot get total page, then return default value 50
+    if page_info == None:
+        return 50
+    # '{"totalPage":5,"curPage":1}'
+    page_info_str = page_info.get('page-data').split(',')[0]
+    total_pages = int(page_info_str.split(':')[1])
+    return total_pages
+
+
+def get_total_pages_house(url):
+    source_code = get_source_code(url)
+    soup = BeautifulSoup(source_code, 'lxml')
+    total_pages = 0
+    try:
+        page_info = soup.find('div', {'class': 'page-box house-lst-page-box'})
         found_count = soup.find('h2', {'class': 'total fl'}).find('span').contents[0]
+        count = int(found_count)
+        if count == 0:
+            return 0
+    except AttributeError as e:
+        page_info = None
+
+    # if it doesnot get total page, then return default value 50
+    if page_info == None:
+        return 50
+    # '{"totalPage":5,"curPage":1}'
+    page_info_str = page_info.get('page-data').split(',')[0]
+    total_pages = int(page_info_str.split(':')[1])
+    return total_pages
+
+
+def get_total_pages_sell(url):
+    source_code = get_source_code(url)
+    soup = BeautifulSoup(source_code, 'lxml')
+    total_pages = 0
+    try:
+        page_info = soup.find('div', {'class': 'page-box house-lst-page-box'})
+        found_count = soup.find('div', {'class': 'total fl'}).find('span').contents[0]
         count = int(found_count)
         if count == 0:
             return 0

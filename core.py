@@ -8,7 +8,7 @@ import urllib2
 import logging
 
 logging.basicConfig(
-    format='%(asctime)s - %(levelname)s - %(funcName)s:%(lineno)s - %(message)s', level=logging.INFO)
+    format='%(asctime)s - %(levelname)s - %(threadName)s - %(funcName)s:%(lineno)s - %(message)s', level=logging.INFO)
 
 
 def GetHouseByCommunitylist(city, communitylist):
@@ -103,7 +103,7 @@ def get_house_percommunity(city, communityname):
 
     if check_block(soup):
         return
-    total_pages = misc.get_total_pages(url)
+    total_pages = misc.get_total_pages_house(url)
 
     if total_pages == 0:
         logging.info("Found " + communityname + " " +  str(total_pages) + " pages")
@@ -162,6 +162,7 @@ def get_house_percommunity(city, communityname):
                 info_dict.update({u'unitPrice': unitPrice.get('data-price')})
                 info_dict.update({u'houseID': unitPrice.get('data-hid')})
             except:
+                logging.warning("Prcessing house error " + str(housetitle.a.get('href')))
                 continue
             # houseinfo insert into mysql
             data_source.append(info_dict)
@@ -188,7 +189,11 @@ def get_sell_percommunity(city, communityname):
 
     if check_block(soup):
         return
-    total_pages = misc.get_total_pages(url)
+    total_pages = misc.get_total_pages_sell(url)
+
+    if total_pages == 0:
+        logging.info("Found " + communityname + " " +  str(total_pages) + " pages")
+        return
 
     if total_pages == None:
         row = model.Sellinfo.select().count()
